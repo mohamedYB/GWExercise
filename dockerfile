@@ -8,20 +8,18 @@ LABEL version="1.0" maintainer="YAHIA BEY Mohamed"
 
 
 # VARIABLES TEMPORAIRES
-ARG APT_FLAGS="-q -y"
+ARG APT_FLAGS="-qq -y"
 ARG DOCUMENTROOT="/var/www/html/"
 
 
 # Début couche apache et docker
-RUN apt-get update -y && \
-    apt-get install ${APT_FLAGS} apache2 && docker
+RUN apt-get update $APT_FLAGS && \
+    apt-get install $APT_FLAGS apache2 && docker
 
-# Permet d'éviter d'avoir le bug concernant le choix de la timezone
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
-
+#RUN sudo apt-get update -qq -y
 
 # DÉMARRAGE DES SERVICES LORS DE L'EXÉCUTION DE L'IMAGE
-ENTRYPOINT service apache2ctl -D FOREGROUND
+ENTRYPOINT service apache2ctl $APT_FLAGS -D FOREGROUND
 
 # OUVERTURE DU PORT HTTP
 EXPOSE 80
